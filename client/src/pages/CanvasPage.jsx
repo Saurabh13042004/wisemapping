@@ -22,6 +22,7 @@ const initialNodes = [
     targetPosition: Position.Left,
   },
 ];
+const buttonPushed = [0];
 
 const initialEdges = [];
 
@@ -45,7 +46,7 @@ function CustomNode({ id, data }) {
   return (
     <div
       className="px-4 py-2 shadow-md rounded-md bg-white border-2 border-stone-400"
-      style={{ width: "200px", height: "auto" }} // Ensure fixed width for the node
+      style={{ width: "250px", height: "auto" }} // Ensure fixed width for the node
     >
       <div className="flex items-center">
         <div className="ml-2 w-full">
@@ -75,7 +76,36 @@ function CustomNode({ id, data }) {
         </div>
         <button
           className="ml-2 p-1 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          onClick={() => data.onAddChild(id)}
+          onClick={() => {
+            buttonPushed.push(0)
+            data.onAddChild(id)}}
+          aria-label="Add connected node"
+        >
+          <PlusCircle className="w-5 h-5 text-blue-500" />
+        </button>
+        <button
+          className="ml-2 p-1 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          onClick={() => {
+            buttonPushed.push(1)
+            data.onAddChild(id)}}
+          aria-label="Add connected node"
+        >
+          <PlusCircle className="w-5 h-5 text-blue-500" />
+        </button>
+        <button
+          className="ml-2 p-1 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          onClick={() => {
+            buttonPushed.push(2)
+            data.onAddChild(id)}}
+          aria-label="Add connected node"
+        >
+          <PlusCircle className="w-5 h-5 text-blue-500" />
+        </button>
+        <button
+          className="ml-2 p-1 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          onClick={() => {
+            buttonPushed.push(3)
+            data.onAddChild(id)}}
           aria-label="Add connected node"
         >
           <PlusCircle className="w-5 h-5 text-blue-500" />
@@ -120,13 +150,28 @@ export default function CanvasPage() {
 
       let newNodePosition;
 
-      if (childNodeCount === 0) {
+      if (childNodeCount === 0 && buttonPushed.at(buttonPushed.length -1) === 0) {
         // First child node, place directly to the right
         newNodePosition = {
           x: parentNode.position.x + nodeSpacingX + 50,
           y: parentNode.position.y, // Same Y-axis as parent
         };
-      } else {
+      } else if(childNodeCount === 0 && buttonPushed.at(buttonPushed.length-1)===1) {
+          newNodePosition = {
+            x: parentNode.position.x,
+            y: parentNode.position.y - 100,
+          }
+      } else if(childNodeCount === 0 && buttonPushed.at(buttonPushed.length-1)===2) {
+        newNodePosition = {
+          x: parentNode.position.x,
+          y: parentNode.position.y + 100,
+        }
+    } else if(childNodeCount === 0 && buttonPushed.at(buttonPushed.length-1)===3) {
+      newNodePosition = {
+        x: parentNode.position.x - nodeSpacingX - 50,
+        y: parentNode.position.y,
+      }
+  }else {
         // For additional child nodes, calculate a larger yOffset
         const direction = childNodeCount % 2 === 0 ? -1 : 1; // Alternate between top (-1) and bottom (1)
         const yOffset =
